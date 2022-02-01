@@ -1,3 +1,14 @@
+/*
+ * gui.c
+ *
+ * SDL bindings.
+ *
+ * MIT License (see: LICENSE)
+ * copyright (c) 2022 tomaz stih
+ *
+ * 31.01.2022   tstih
+ *
+ */
 #include <stdbool.h>
 #include <stdint.h>
 

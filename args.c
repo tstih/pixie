@@ -1,6 +1,18 @@
+/*
+ * args.c
+ *
+ * Command line arguments parsing.
+ *
+ * MIT License (see: LICENSE)
+ * copyright (c) 2022 tomaz stih
+ *
+ * 01.02.2022   tstih
+ *
+ */
 #include <getopt.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdlib.h>
 
 #include "panic.h"
 #include "args.h"
