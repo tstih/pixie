@@ -4,4 +4,4 @@
 pixie
 
 # VSCode
-.vscode/
+.vscode/*.log
