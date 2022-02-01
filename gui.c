@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "panic.h"
+#include "args.h"
 
 static SDL_Window* _window;
 static SDL_Renderer *_renderer;
@@ -11,15 +12,17 @@ static SDL_Renderer *_renderer;
 /* Green component of line color. */
 static uint8_t _intensity = 0xff;
 
-void gui_init(int width, int height) {
+void gui_init(args_t *args) {
     
     /* Initialize the SDL. This is a critical operation. */
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         panic(CANT_INIT_GUI, "Can't initialize SDL: %s\n", SDL_GetError());
 
     /* If we are here, initialize the main window. */
-    if (SDL_CreateWindowAndRenderer(width,height,0,&_window,&_renderer)!=0)
+    if (SDL_CreateWindowAndRenderer(args->width,args->height,0,&_window,&_renderer)!=0)
         panic(CANT_INIT_GUI, "Can't create window: %s\n", SDL_GetError());
+
+    SDL_SetWindowTitle(_window, args->title);
 }
 
 void gui_exit() {

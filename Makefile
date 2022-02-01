@@ -13,7 +13,7 @@ LDLIBS           =   -lSDL2
 
 all: pixie
 
-pixie: pixie.o gui.o panic.o cmdline.o
+pixie: pixie.o gui.o panic.o args.o pipes.o cmd.o
 
 clean: 
 	rm -f pixie  *.o *~

@@ -13,7 +13,8 @@
             "linux": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "gdb",
-                "program": "${workspaceFolder}/pixie"
+                "program": "${workspaceFolder}/pixie",
+                "args": ["--width", "320", "-h", "200", "--title", "Iskra Delta Partner","/tmp/pixie.np"]
             },
             "preLaunchTask": "build"
         }

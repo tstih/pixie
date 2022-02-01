@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-extern void gui_init(int width, int height);
+extern void gui_init(args_t *args);
 extern void gui_exit();
 extern void gui_run();
 extern void gui_cls();
