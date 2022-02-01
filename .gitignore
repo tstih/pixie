@@ -1,0 +1,7 @@
+# Pixie outputs
+*.o
+*~
+pixie
+
+# VSCode
+.vscode/
