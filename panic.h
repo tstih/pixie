@@ -13,9 +13,11 @@
 #ifndef __PANIC_H__
 #define __PANIC_H__
 
-#define SUCCESS         0
-#define CANT_INIT_GUI   1
-#define INVALID_ARGS    2
+#define SUCCESS             0
+#define CANT_INIT_GUI       1
+#define INVALID_ARGS        2
+#define CANT_CREATE_PIPE    3
+#define CANT_OPEN_PIPE      4
 
 extern void panic(int errcode, const char *fornat, ...);
 

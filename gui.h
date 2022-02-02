@@ -13,10 +13,11 @@
 #define __GUI_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 extern void gui_init(args_t *args);
 extern void gui_exit();
-extern void gui_run();
+extern void gui_run(bool(*process_commands)());
 extern void gui_cls();
 extern void gui_set_intensity(uint8_t intensity);
 extern void gui_set_pixel(int x, int y);

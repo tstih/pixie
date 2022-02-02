@@ -16,6 +16,7 @@
 
 #include "panic.h"
 #include "args.h"
+#include "exec.h"
 
 static SDL_Window* _window;
 static SDL_Renderer *_renderer;
@@ -48,7 +49,7 @@ void gui_cls() {
     SDL_SetRenderDrawColor(_renderer, 0x00, _intensity, 0x00, 0x00);
 }
 
-void gui_run() {
+void gui_run(bool(*process_commands)()) {
 
     /* Clear screen first. */
     gui_cls();
@@ -56,7 +57,7 @@ void gui_run() {
     /* Main loop. */
     bool quit = false;
     while( !quit )
-    {             
+    {     
         /* Update the surface */
         SDL_RenderPresent(_renderer);
 
@@ -65,6 +66,9 @@ void gui_run() {
         while( SDL_PollEvent( &e ) != 0 )
             if( e.type == SDL_QUIT )
                 quit = true;
+
+        /* Execute commands. */
+        quit &= process_commands();
     }
 }
 
