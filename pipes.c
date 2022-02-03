@@ -15,6 +15,8 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <stddef.h>
+#include <unistd.h>
+#include <string.h>
 
 #include "panic.h"
 #include "args.h"

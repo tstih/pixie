@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "panic.h"
 #include "args.h"
 #include "pipes.h"

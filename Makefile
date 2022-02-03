@@ -10,10 +10,13 @@
 CC               =   gcc
 CFLAGS           =   -Wall -g
 LDLIBS           =   -lSDL2
+LEX              =   flex
+YACC             =   bison -y
+YFLAGS           =   -d
 
 all: pixie
 
-pixie: pixie.o gui.o panic.o args.o pipes.o exec.o
+pixie: pixie.o gui.o panic.o args.o pipes.o exec.o parser.o lexer.o
 
 clean: 
 	rm -f pixie  *.o *~
