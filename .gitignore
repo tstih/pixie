@@ -5,3 +5,6 @@ pixie
 
 # VSCode
 .vscode/*.log
+
+# lex/yacc
+y.tab.h
