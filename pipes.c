@@ -42,8 +42,8 @@ void fifo_disconnect() {
    = 0 ... line not terminated, but no characters pending
    < 0 ... pipe error
 */
-int fifo_readline(char *buff, int maxlen, bool append) {
-    int bytesread, i = append?strlen(buff):0;
+int fifo_readline(char *buff, int maxlen) {
+    int bytesread, i = 0;
     char ch = 0;
     while(1)
     {
@@ -63,10 +63,6 @@ int fifo_readline(char *buff, int maxlen, bool append) {
                     buff[i++]=ch;
             }
         }
-        else if (bytesread==0 && errno == EAGAIN) { /* Try again. */
-            buff[i]=0;
-            return 0;   
-        }
-        else return bytesread; /* Pipe is no more? Return negative. */
+        return bytesread; /* Pipe is no more? Return negative. */
     }
 }

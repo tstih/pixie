@@ -20,6 +20,6 @@
 
 extern void fifo_connect(args_t *args);
 extern void fifo_disconnect();
-extern int fifo_readline(char *buff, int maxlen, bool append);
+extern int fifo_readline(char *buff, int maxlen);
 
 #endif /* __PIPES_H__ */

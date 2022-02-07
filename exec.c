@@ -19,7 +19,9 @@ extern void exec_parse(char* str);
 
 /* Execute single command. */
 void exec_command(char *cmd) {
-    exec_parse(cmd);
+    /* Be tolerand towards null terminated strings. */
+    if (strlen(cmd)>0)
+        exec_parse(cmd);
 }
 
 /* Assumptions are that file descriptor is valid
@@ -31,7 +33,7 @@ bool exec_commands() {
     /* Read all available lines from the pipe. */
     do {
         /* Read line. */
-        read=fifo_readline(buffer, 0xff, read==0);
+        read=fifo_readline(buffer, 0xff);
         /* And process it... */
         if (read > 0) exec_command(buffer);
     } while (read > 0);
