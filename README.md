@@ -24,9 +24,10 @@ make
 pixie --width 330 --height 410 --title Vectrex /tmp/pixie.pipe
 ~~~
 
- > Pixie blocks until data is received on the named pipe. 
- > Thus you will need to open two consoles - one for pixie and
- > one for sending commands.
+ > When you run pixie it will block the terminal until you press
+ > Ctrl+C or send commands to the named pipe. Therefore you will 
+ > need to open two terminals: one for pixie and one for sending 
+ > commands.
 
 ## Commands 
 
@@ -39,16 +40,13 @@ You can send pixie four basic commands
 | I<n>           | Set color intensity (0-255)   | I128             |
 | C              | Clear screen                  | C                |
 
-Use named pipe to send commands. 
-
 ### Example(s)
 
 ![screenshot](img/pixie.png)
 
 ## Why pixie?
 
-To simulate procedural programming environment on an event driven GUI.
-
+To simulate procedural programming environment on an event driven GUI. You can, for example, develop vector game prototypes for 8-bit machines on Linux, or test your drawing algorithms on pixie.
 
 [language.url]:   https://en.wikipedia.org/wiki/ANSI_C
 [language.badge]: https://img.shields.io/badge/language-C-blue.svg
