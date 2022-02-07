@@ -31,17 +31,15 @@ bool exec_commands() {
     static int read = 0;
     static char buffer[MAX_LINE_LEN] = "";
 
-    /* Read all available lines from the pipe. */
-    do {
-        /* Read line. */
-        read=fifo_readline(buffer, 0xfff, read==0);
-        /* And process it... */
-        if (read > 0) exec_command(buffer);
-    } while (read > 0);
+    /* Read line from pipe. */
+    read=fifo_readline(buffer, 0xfff, read==0);
+    /* And process it... */
+    if (read > 0) 
+        exec_command(buffer);
 
     /* If it is 0 then we emptied the pipe. 
        But if it is negative then it's a pipe error. */
-    return (read == 0);
+    return (read >= 0);
 }
 
 void exec_error(char const *msg, int line, int column) {
