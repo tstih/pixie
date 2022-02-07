@@ -21,5 +21,6 @@ extern void gui_run(bool(*process_commands)());
 extern void gui_cls();
 extern void gui_set_intensity(uint8_t intensity);
 extern void gui_set_pixel(int x, int y);
+extern void gui_draw_line(int x0, int y0, int x1, int y1);
 
 #endif /* __GUI_H__ */

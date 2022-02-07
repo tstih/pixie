@@ -16,7 +16,7 @@ YFLAGS           =   -d
 
 all: pixie
 
-pixie: pixie.o gui.o panic.o args.o pipes.o exec.o parser.o lexer.o
+pixie: pixie.o parser.o lexer.o gui.o panic.o args.o pipes.o exec.o
 
 clean: 
 	rm -f pixie  *.o *~ y.tab.h

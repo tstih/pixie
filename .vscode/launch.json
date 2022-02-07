@@ -14,7 +14,7 @@
                 "MIMode": "gdb",
                 "miDebuggerPath": "gdb",
                 "program": "${workspaceFolder}/pixie",
-                "args": ["--title", "Iskra Delta Partner","/tmp/pixie.np"]
+                "args": ["--title", "Iskra Delta Partner","/tmp/pixie.pipe"]
             },
             "preLaunchTask": "build"
         }

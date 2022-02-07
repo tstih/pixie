@@ -16,5 +16,6 @@
 #include "args.h"
 
 extern bool exec_commands();
+extern void yyerror(char const *s);
 
 #endif /* __EXEC_H__ */

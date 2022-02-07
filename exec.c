@@ -14,9 +14,12 @@
 
 #include "pipes.h"
 
+/* Lex and yacc stuff... */
+extern void scan_string(char* str);
+
 /* Execute single command. */
 void exec_command(char *cmd) {
-    
+    scan_string(cmd);
 }
 
 /* Assumptions are that file descriptor is valid
@@ -36,4 +39,8 @@ bool exec_commands() {
     /* If it is 0 then we emptied the pipe. 
        But if it is negative then it's a pipe error. */
     return (read == 0);
+}
+
+void yyerror(char const *s) { 
+    
 }
