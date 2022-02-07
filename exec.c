@@ -15,11 +15,11 @@
 #include "pipes.h"
 
 /* Lex and yacc stuff... */
-extern void scan_string(char* str);
+extern void exec_parse(char* str);
 
 /* Execute single command. */
 void exec_command(char *cmd) {
-    scan_string(cmd);
+    exec_parse(cmd);
 }
 
 /* Assumptions are that file descriptor is valid
@@ -41,6 +41,6 @@ bool exec_commands() {
     return (read == 0);
 }
 
-void yyerror(char const *s) { 
+void exec_error(char const *msg, int line, int column) {
     
 }

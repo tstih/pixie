@@ -10,7 +10,9 @@ void yyerror(const char *s);
 
 %}
 
-%start statements
+%locations
+
+%start statement
 %union {
     int num;
     struct point_s {
@@ -30,10 +32,6 @@ void yyerror(const char *s);
 %type <line> lcoords
 
 %%
-
-statements  :   statement
-            |   statement statements
-            ;
 
 statement   :   PIXEL pcoords           { gui_set_pixel ($2.x, $2.y); }
             |   LINE lcoords            { 
@@ -61,7 +59,7 @@ pcoords     :   NUMBER SEPARATOR NUMBER {
 
 %%
 
-int yywrap() {return 1;}
-
-
+int yywrap() {
+    return 1;
+}
 

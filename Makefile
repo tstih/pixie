@@ -12,7 +12,7 @@ CFLAGS           =   -Wall -g
 LDLIBS           =   -lSDL2
 LEX              =   flex
 YACC             =   bison -y
-YFLAGS           =   -d
+YFLAGS           =   -d 
 
 all: pixie
 
