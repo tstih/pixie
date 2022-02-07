@@ -34,7 +34,7 @@ bool exec_commands() {
     /* Read all available lines from the pipe. */
     do {
         /* Read line. */
-        read=fifo_readline(buffer, 0xff);
+        read=fifo_readline(buffer, 0xfff, read==0);
         /* And process it... */
         if (read > 0) exec_command(buffer);
     } while (read > 0);
