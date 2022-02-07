@@ -19,4 +19,4 @@ all: pixie
 pixie: pixie.o parser.o lexer.o gui.o panic.o args.o pipes.o exec.o
 
 clean: 
-	rm -f pixie  *.o *~ y.tab.h
+	rm -f pixie  *.o *~ y.tab.h parser.tab.*
