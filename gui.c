@@ -78,7 +78,7 @@ void gui_set_intensity(uint8_t intensity) {
 }
 
 void gui_set_pixel(int x, int y) {
-    SDL_RenderDrawPoint(_renderer, 400, 300);
+    SDL_RenderDrawPoint(_renderer, x, y);
 }
 
 void gui_draw_line(int x0, int y0, int x1, int y1) {
