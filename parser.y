@@ -1,5 +1,6 @@
 %{
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "exec.h"
 #include "args.h"
@@ -14,7 +15,8 @@ void yyerror(const char *s);
 
 %start statement
 %union {
-    int num;
+    uint8_t byte;
+    int integer;
     struct point_s {
         int x;
         int y;
@@ -24,22 +26,24 @@ void yyerror(const char *s);
         struct point_s p1;
     } line;
 }
-%token <num> NUMBER 
+%token <integer> NUMBER 
 %token SEPARATOR
 %token PIXEL LINE CLEAR INTENSITY
 
 %type <point> pcoords
 %type <line> lcoords
+%type <byte> pattern
 
 %%
 
 statement   :   PIXEL pcoords           { gui_set_pixel ($2.x, $2.y); }
-            |   LINE lcoords            { 
+            |   LINE lcoords pattern    { 
                     gui_draw_line(
                         $2.p0.x,
                         $2.p0.y,
                         $2.p1.x,
-                        $2.p1.y
+                        $2.p1.y,
+                        $3              /* Solid pattern. */
                     );
                 }
             |   CLEAR                   { gui_cls(); }
@@ -55,6 +59,10 @@ lcoords     :   pcoords SEPARATOR pcoords {
 pcoords     :   NUMBER SEPARATOR NUMBER {
                     $$.x=$1; $$.y=$3; 
                 }
+            ;
+
+pattern     :   /* Empty. */            { $$=0xff; }
+                | SEPARATOR NUMBER      { $$ =$2; }
             ;
 
 %%

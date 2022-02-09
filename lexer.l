@@ -16,7 +16,7 @@
 "C"         return CLEAR;
 "I"         return INTENSITY;
 ","         return SEPARATOR;
-[0-9]+      { yylval.num=atoi(yytext); return NUMBER; }
+[0-9]+      { yylval.integer=atoi(yytext); return NUMBER; }
 
 %%
 

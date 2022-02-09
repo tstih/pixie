@@ -5,6 +5,13 @@
 pixie is a simple vector display emulator for Linux. You can send
 commands to pixie using a named pipe. 
 
+## Changes
+
+~~~
+09-Feb-2022  Added optional line pattern.
+07-Feb-2022  First version.
+~~~
+
 ## Compile
 
 ~~~
@@ -33,12 +40,12 @@ pixie --width 330 --height 410 --title Vectrex /tmp/pixie.pipe
 
 You can send pixie four basic commands
 
-| Command        | Desciption                    | Example          |
-|----------------|-------------------------------|------------------|
-| P<x,y>         | Draw pixel at x,y.            | P100,100         |
-| L<x0,y0,x1,y1> | Draw line from x0,y0 to x1,y1 | L100,100,300,300 |
-| I<n>           | Set color intensity (0-255)   | I128             |
-| C              | Clear screen                  | C                |
+| Command                  | Desciption                                      | Example          |
+|--------------------------|-------------------------------------------------|------------------|
+| P<x,y>                   | Draw pixel at x,y.                              | P100,100         |
+| L<x0,y0,x1,y1[,pattern]> | Draw line from x0,y0 to x1,y1 using bit pattern | L100,100,300,300 |
+| I<n>                     | Set color intensity (0-255)                     | I128             |
+| C                        | Clear screen                                    | C                |
 
 ### Example(s)
 
