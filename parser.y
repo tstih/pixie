@@ -28,7 +28,7 @@ void yyerror(const char *s);
 }
 %token <integer> NUMBER 
 %token SEPARATOR
-%token PIXEL LINE CLEAR INTENSITY
+%token PIXEL LINE CLEAR INTENSITY BLIT
 
 %type <point> pcoords
 %type <line> lcoords
@@ -48,6 +48,7 @@ statement   :   PIXEL pcoords           { gui_set_pixel ($2.x, $2.y); }
                 }
             |   CLEAR                   { gui_cls(); }
             |   INTENSITY NUMBER        { gui_set_intensity($2); }
+            |   BLIT NUMBER             { gui_set_blit($2); }
             ;
 
 lcoords     :   pcoords SEPARATOR pcoords {

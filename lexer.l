@@ -15,6 +15,7 @@
 "L"         return LINE;
 "C"         return CLEAR;
 "I"         return INTENSITY;
+"B"         return BLIT;
 ","         return SEPARATOR;
 [0-9]+      { yylval.integer=atoi(yytext); return NUMBER; }
 

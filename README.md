@@ -8,6 +8,7 @@ commands to pixie using a named pipe.
 ## Changes
 
 ~~~
+10-Feb-2022  Added the blit mode (XOR or COPY)
 09-Feb-2022  Added optional line pattern.
 07-Feb-2022  First version.
 ~~~
@@ -18,7 +19,7 @@ commands to pixie using a named pipe.
 make
 ~~~
 
-## Usage
+## Use
 
 *pixie [--width n] [--height m] [--title s] [pipe]*
 
@@ -46,6 +47,7 @@ You can send pixie four basic commands
 | L<x0,y0,x1,y1[,pattern]> | Draw line from x0,y0 to x1,y1 using bit pattern | L100,100,300,300 |
 | I<n>                     | Set color intensity (0-255)                     | I128             |
 | C                        | Clear screen                                    | C                |
+| B<blitmode>              | Set blit mode: 0=NONE, 1=COPY, 2=XOR            | B2               |
 
 ### Example(s)
 
@@ -54,6 +56,10 @@ You can send pixie four basic commands
 ## Why pixie?
 
 To simulate procedural programming environment on an event driven GUI. You can, for example, develop vector game prototypes for 8-bit machines on Linux, or test your drawing algorithms on pixie.
+
+## To do
+
+My wish list includes (in this order) raster operations, colors, and a retro CRT shader. Stay tuned.
 
 [language.url]:   https://en.wikipedia.org/wiki/ANSI_C
 [language.badge]: https://img.shields.io/badge/language-C-blue.svg
