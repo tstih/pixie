@@ -138,10 +138,9 @@ void gui_draw_line(int x0, int y0, int x1, int y1, uint8_t pattern) {
             /* Get current pixel at position... */
             uint8_t iback = _pixel_intensity(x0,y0);
             if (_xor(ifore,iback,&ifore)) 
-                *(_pixel_offset(x0,y0)+1)=
-                    *_pixel_offset(x0,y0)=SDL_MapRGBA(_surface->format, 0, ifore, 0, 0xff);
+                *_pixel_offset(x0,y0)=SDL_MapRGBA(_surface->format, 0, ifore, 0, 0xff);
         } else 
-             *_pixel_offset(x0,y0)=SDL_MapRGBA(_surface->format, 0, _intensity, 0, 0xff);
+             *_pixel_offset(x0,y0)=SDL_MapRGBA(_surface->format, 0, ifore, 0, 0xff);
         /* Shift pattern. */
         bit>>=1;
         if (bit==0) bit=0x80;
