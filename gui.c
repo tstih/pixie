@@ -22,12 +22,20 @@
 #define BLIT_COPY   1
 #define BLIT_XOR    2
 
-static SDL_Window* _window;
-static SDL_Surface *_surface=NULL;
-static SDL_Surface *_wsurface=NULL;
+#define MAX_PAGES   10
+typedef struct page_s {
+    int ink;
+    int paper;
+    int ipage;
+    SDL_Surface *surface;
+} page_t;
 
-/* Green component of line color. */
-static uint8_t _intensity = 0xff;
+static page_t _pages[MAX_PAGES];
+static int _dpage, _wpage; /* display and write page index */
+static int _num_pages;
+
+static SDL_Window* _window;
+static SDL_Surface *_wsurface=NULL;
 
 /* Blit mode. 0=copy, 1=xor */
 static uint8_t _blit = 0;
@@ -38,7 +46,8 @@ static int _width, _height;
 /* Utility functions. */
 static uint32_t * _pixel_offset(int x, int y);
 static bool _xor(uint8_t ifore, uint8_t iback, uint8_t *iresult);
-static uint8_t _pixel_intensity(int x, int y);
+static uint8_t _get_pixel(int x, int y);
+static int _page_find(int page);
 
 void gui_init(args_t *args) {
     
@@ -58,15 +67,23 @@ void gui_init(args_t *args) {
     /* Get window surface. */
     _wsurface = SDL_GetWindowSurface(_window);
 
+    /* Initialize page 0 */
+    _dpage=_wpage=0;
+    _num_pages=1;
+    _pages[0].ipage=0;
+    _pages[0].ink=255;
+    _pages[0].paper=0;
+
+
     /* Initialize 32 bit RGBA surface to use for blitting. */
-    _surface=SDL_CreateRGBSurface(
+    _pages[0].surface=SDL_CreateRGBSurface(
             0, _width, _height, 32,
             0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
 }
 
 
 void gui_exit() {
-    if (_surface!=NULL) SDL_FreeSurface(_surface);
+    for(int i=0;i<_num_pages;i++) SDL_FreeSurface(_pages[i].surface);
     SDL_DestroyWindow( _window );
     SDL_Quit();
 }
@@ -74,7 +91,9 @@ void gui_exit() {
 
 void gui_cls() {
     /* Clears the surface. */
-    SDL_FillRect(_surface, NULL, 0xff000000);
+    SDL_FillRect(_pages[_wpage].surface, NULL, 
+        SDL_MapRGBA(_pages[_wpage].surface->format, 0, _pages[_wpage].paper, 0, 0xff)
+    );
 }
 
 
@@ -85,7 +104,7 @@ void gui_run(bool(*process_commands)()) {
     while( !quit )
     {     
         /* Copy work surface to screen surface. */
-        SDL_BlitSurface(_surface, NULL, _wsurface, NULL );
+        SDL_BlitSurface(_pages[_dpage].surface, NULL, _wsurface, NULL );
 
         /* And show it... */
         SDL_UpdateWindowSurface(_window);
@@ -103,19 +122,22 @@ void gui_run(bool(*process_commands)()) {
 
 
 void gui_set_intensity(uint8_t intensity) {
-    _intensity=intensity;
+    _pages[_wpage].ink=intensity;
 }
 
+void gui_set_paper(uint8_t paper) {
+    _pages[_wpage].paper=paper;
+}
 
 void gui_set_pixel(int x, int y) {
 
     if (_blit==BLIT_XOR) { /* XOR? */
-        uint8_t iback = _pixel_intensity(x,y);
-        uint8_t icurrent=_intensity, iresult;
-        if (_xor(icurrent,iback,&iresult)) 
-            *_pixel_offset(x,y)=SDL_MapRGBA(_surface->format, 0, iresult, 0, 0xff);;
+        uint8_t iback = _get_pixel(x,y);
+        uint8_t icurrent=_pages[_wpage].ink;
+        if (_xor(icurrent,iback,&icurrent)) 
+            *_pixel_offset(x,y)=SDL_MapRGBA(_pages[_wpage].surface->format, 0, icurrent, 0, 0xff);;
     } else
-        *_pixel_offset(x,y)=SDL_MapRGBA(_surface->format, 0, _intensity, 0, 0xff);
+        *_pixel_offset(x,y)=SDL_MapRGBA(_pages[_wpage].surface->format, 0, _pages[_wpage].ink, 0, 0xff);
 
 }
 
@@ -131,16 +153,16 @@ void gui_draw_line(int x0, int y0, int x1, int y1, uint8_t pattern) {
     for (;;){  /* Loop */
         
         /* Apply mask to foreground. */
-        uint8_t ifore=pattern & bit ? _intensity : 0;
+        uint8_t ifore=pattern & bit ? _pages[_wpage].ink : 0;
 
         /* Blit mode? */
         if (_blit==BLIT_XOR) {
             /* Get current pixel at position... */
-            uint8_t iback = _pixel_intensity(x0,y0);
+            uint8_t iback = _get_pixel(x0,y0);
             if (_xor(ifore,iback,&ifore)) 
-                *_pixel_offset(x0,y0)=SDL_MapRGBA(_surface->format, 0, ifore, 0, 0xff);
+                *_pixel_offset(x0,y0)=SDL_MapRGBA(_pages[_wpage].surface->format, 0, ifore, 0, 0xff);
         } else 
-             *_pixel_offset(x0,y0)=SDL_MapRGBA(_surface->format, 0, ifore, 0, 0xff);
+             *_pixel_offset(x0,y0)=SDL_MapRGBA(_pages[_wpage].surface->format, 0, ifore, 0, 0xff);
         /* Shift pattern. */
         bit>>=1;
         if (bit==0) bit=0x80;
@@ -156,34 +178,70 @@ void gui_set_blit(uint8_t blit) {
     _blit=blit;
 }
 
+void gui_set_wpage(int page) {
+    int i=_page_find(page);
+    if (i>=0) _wpage=i;
+}
+
+void gui_set_dpage(int page) {
+    int i=_page_find(page);
+    if (i>=0) _dpage=i;
+}
 
 /*****************************************************************************/
 
 
+static int _page_find(int page) {
+    int found=-1;
+    for (int i=0;i<_num_pages && found==-1;i++) {
+        if (_pages[i].ipage==page)
+            found=i;
+    }
+    /* If page not found, create page... */
+    if (found==-1) {
+        /* Too many pages? */
+        if (_num_pages==MAX_PAGES) return -1;
+        /* Create new page... */
+        found=_num_pages;
+        _pages[_num_pages].ipage=page;
+        _pages[_num_pages].surface=SDL_CreateRGBSurface(
+                0, _width, _height, 32,
+                0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+        _pages[_num_pages].ink=255;
+        _pages[_num_pages].paper=0;
+        /* Clear screen...*/
+        SDL_FillRect(_pages[_num_pages].surface, NULL, 
+            SDL_MapRGBA(_pages[_num_pages].surface->format, 0, _pages[_num_pages].paper, 0, 0xff)
+        );
+        _num_pages++;
+    }
+    return found;
+}
+
 static uint32_t * _pixel_offset(int x, int y) {
     return  
-        (uint32_t *)_surface->pixels
+        (uint32_t *)_pages[_wpage].surface->pixels
         + y * _width /* pitch is fine, we have 32bpp and int32 */
         + x;
 }
 
-static uint8_t _pixel_intensity(int x, int y) {
+static uint8_t _get_pixel(int x, int y) {
     uint8_t *p =
-        (uint8_t *)_surface->pixels
-        + y * _surface->pitch
-        + x * _surface->format->BytesPerPixel;
+        (uint8_t *)_pages[_wpage].surface->pixels
+        + y * _pages[_wpage].surface->pitch
+        + x * _pages[_wpage].surface->format->BytesPerPixel;
     return *(p+1); /* Get green component of pixel... */
 }
 
 static bool _xor(uint8_t ifore, uint8_t iback, uint8_t *iresult) {
-    if (ifore==0 && iback==0)
+    if (ifore==_pages[_wpage].ink && iback==_pages[_wpage].paper)
         return false; /* Don't change pixel. */
-    else if (ifore==0 && iback>0)
+    else if (ifore==_pages[_wpage].paper && iback>_pages[_wpage].paper)
         return false;
-    else if (ifore>0 && iback==0) 
+    else if (ifore>_pages[_wpage].paper && iback==_pages[_wpage].paper) 
         *iresult=ifore;
     else
-        *iresult=0;
+        *iresult=_pages[_wpage].paper;
     /* All false variants are exhausted. */
     return true;
 }

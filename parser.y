@@ -28,7 +28,8 @@ void yyerror(const char *s);
 }
 %token <integer> NUMBER 
 %token SEPARATOR
-%token PIXEL LINE CLEAR INTENSITY BLIT
+%token XOR COPY WRITE DISPLAY
+%token PIXEL LINE CLEAR INK BLIT PAPER PAGE
 
 %type <point> pcoords
 %type <line> lcoords
@@ -47,8 +48,13 @@ statement   :   PIXEL pcoords           { gui_set_pixel ($2.x, $2.y); }
                     );
                 }
             |   CLEAR                   { gui_cls(); }
-            |   INTENSITY NUMBER        { gui_set_intensity($2); }
+            |   INK NUMBER              { gui_set_intensity($2); }
+            |   PAPER NUMBER            { gui_set_paper($2); }
             |   BLIT NUMBER             { gui_set_blit($2); }
+            |   BLIT XOR                { gui_set_blit(2); }
+            |   BLIT COPY               { gui_set_blit(1); }
+            |   PAGE DISPLAY NUMBER     { gui_set_dpage($3); }
+            |   PAGE WRITE NUMBER       { gui_set_wpage($3);  }
             ;
 
 lcoords     :   pcoords SEPARATOR pcoords {

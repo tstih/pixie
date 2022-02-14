@@ -11,12 +11,18 @@
 
 %%
 
-"P"         return PIXEL;
-"L"         return LINE;
-"C"         return CLEAR;
-"I"         return INTENSITY;
-"B"         return BLIT;
-","         return SEPARATOR;
+"XOR"           return XOR;
+"COPY"          return COPY;
+"W"|"WRITE"     return WRITE;
+"D"|"DISPLAY"   return DISPLAY;
+"PAGE"          return PAGE;
+"P"|"PIXEL"     return PIXEL;
+"L"|"LINE"      return LINE;
+"C"|"CLS"       return CLEAR;
+"I"|"INK"       return INK;
+"PAPER"         return PAPER;
+"B"|"BLIT"      return BLIT;
+","             return SEPARATOR;
 [0-9]+      { yylval.integer=atoi(yytext); return NUMBER; }
 
 %%
