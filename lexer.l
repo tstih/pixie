@@ -13,7 +13,9 @@
 
 "XOR"           return XOR;
 "COPY"          return COPY;
+"VALUES"        return VALUES;
 "W"|"WRITE"     return WRITE;
+"R"|"RASTER"    return RASTER;
 "D"|"DISPLAY"   return DISPLAY;
 "PAGE"          return PAGE;
 "P"|"PIXEL"     return PIXEL;
@@ -23,7 +25,7 @@
 "PAPER"         return PAPER;
 "B"|"BLIT"      return BLIT;
 ","             return SEPARATOR;
-[0-9]+      { yylval.integer=atoi(yytext); return NUMBER; }
+[0-9]+          { yylval.integer=atoi(yytext); return NUMBER; }
 
 %%
 

@@ -26,5 +26,6 @@ extern void gui_draw_line(int x0, int y0, int x1, int y1, uint8_t pattern);
 extern void gui_set_blit(uint8_t blit);
 extern void gui_set_wpage(int page);
 extern void gui_set_dpage(int page);
+extern void gui_write_raster(int x, int y, int count, uint8_t *bytes);
 
 #endif /* __GUI_H__ */

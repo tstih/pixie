@@ -3,5 +3,8 @@
         "${workspaceFolder}",
         "/usr/include",
         "/usr/include/SDL2"
-    ]
+    ],
+    "files.associations": {
+        "cstddef": "c"
+    }
 }

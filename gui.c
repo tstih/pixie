@@ -188,6 +188,18 @@ void gui_set_dpage(int page) {
     if (i>=0) _dpage=i;
 }
 
+void gui_write_raster(int x, int y, int count, uint8_t *bytes) {
+    for(int byte=0;byte<count;byte++) {
+        uint8_t mask=0x80; /* highest bit... */
+        for(int bit=0;bit<8;bit++) {
+            if (bytes[byte] & mask) /* bit set? */
+                gui_set_pixel(x,y);
+            mask>>=1; /* shift mask to next bit */
+            x++;
+        }
+    }
+}
+
 /*****************************************************************************/
 
 

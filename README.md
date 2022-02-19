@@ -2,12 +2,13 @@
 
 # pixie
 
-pixie is a simple vector display emulator for Linux. You can send
-commands to pixie using a named pipe. 
+pixie is a simple vector display emulator for Linux. It can show 256 intensities of green
+color (0=black). You can send commands to pixie using a named pipe. 
 
 ## Changes
 
 ~~~
+19-Feb-2022  Pixie now supports raster operation
 14-Feb-2022  Added support for pages and backgroud "color"
 10-Feb-2022  Added the blit mode (XOR or COPY)
 09-Feb-2022  Added optional line pattern.
@@ -48,8 +49,8 @@ You can send pixie following basic commands
 
 `PAGE DISPLAY n` ... Sets display page (page which is shown)
 
-Default page is one. Pages are dynamically allocated. Pixie allows
-up to ten pages.
+ > Default page is one. Pages are dynamically allocated. Pixie allows
+   up to ten pages.
 
 ### Color Commands
 
@@ -65,13 +66,15 @@ up to ten pages.
 
 `BLIT COPY` ... Set normal mode for blitting
 
-Default blitting is copy.
+ > Default blitting is copy.
 
 ### Drawing
 
 `PIXEL x,y` ... Draws pixel at x,y. Respects blit mode and fore and back colors.
 
 `LINE x0,y0,x1,y1[,pattern]` ... Draws line from x0,y0 to x1,y1. Last parameter is bit pattern i.e. dotted line is 01010101. 
+
+`RASTER x,y VALUES v1[,v2]+` ... Write raster bits (1 bit=1 pixel) to x,y.
 
 ## Example
 
@@ -87,6 +90,7 @@ echo LINE 200,200,10,200,15 >/tmp/pixie.pipe
 echo INK 255 > /tmp/pixie.pipe
 echo LINE 10,200,10,10 > /tmp/pixie.pipe
 echo PAGE DISPLAY 1 > /tmp/pixie.pipe
+echo WRITE RASTER 10,10 VALUES 85,85,85 > /tmp/pixie.pipe
 ~~~
 
 ![And voila...](img/pixie.png)
