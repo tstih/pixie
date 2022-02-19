@@ -74,11 +74,15 @@ void gui_init(args_t *args) {
     _pages[0].ink=255;
     _pages[0].paper=0;
 
-
     /* Initialize 32 bit RGBA surface to use for blitting. */
     _pages[0].surface=SDL_CreateRGBSurface(
-            0, _width, _height, 32,
-            0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+        0, _width, _height, 32,
+        0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+
+    /* And clear screen... */
+    SDL_FillRect(_pages[0].surface, NULL, 
+        SDL_MapRGBA(_pages[0].surface->format, 0, _pages[0].paper, 0, 0xff)
+    );
 }
 
 
@@ -218,7 +222,7 @@ static int _page_find(int page) {
         _pages[_num_pages].ipage=page;
         _pages[_num_pages].surface=SDL_CreateRGBSurface(
                 0, _width, _height, 32,
-                0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+                0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
         _pages[_num_pages].ink=255;
         _pages[_num_pages].paper=0;
         /* Clear screen...*/
